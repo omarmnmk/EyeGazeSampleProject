@@ -61,14 +61,23 @@ class ViewController: UIViewController{
     //MARK: A custom method used to create nodes in Cylinder shape
     private func createAnEyeNode(color : UIColor) -> SCNNode {
         
-        let node = SCNNode(geometry: SCNCylinder(radius: 0.002, height: 0.3))
+        let geometry = SCNCylinder(radius: 0.002, height: 0.2)
+        geometry.radialSegmentCount = 3
+        geometry.firstMaterial?.diffuse.contents = color
         
+        let node = SCNNode()
+        node.geometry = geometry
         node.geometry?.firstMaterial?.diffuse.contents = color
         node.opacity = 1
         node.renderingOrder = 100
         node.geometry?.firstMaterial?.readsFromDepthBuffer = false
+        node.eulerAngles.x = -.pi / 2
+        node.position.z = 0.1
         
-        return node
+        let parentNode = SCNNode()
+        parentNode.addChildNode(node)
+        return parentNode
+        
     }
     
 }
@@ -120,11 +129,11 @@ extension ViewController: ARSCNViewDelegate {
     // MARK: update(ARFaceAnchor)
     func update(withFaceAnchor anchor: ARFaceAnchor) {
         
-        let rotate:matrix_float4x4 =
-            simd_float4x4(SCNMatrix4Mult(SCNMatrix4MakeRotation(-Float.pi / 2.0, 1, 0, 0), SCNMatrix4MakeTranslation(0, 0, 0.1/2)))
+//        let rotate:matrix_float4x4 =
+//            simd_float4x4(SCNMatrix4Mult(SCNMatrix4MakeRotation(-Float.pi / 2.0, 1, 0, 0), SCNMatrix4MakeTranslation(0, 0, 0.1/2)))
         
-        leftEye.simdTransform = anchor.leftEyeTransform * rotate;
-        rightEye.simdTransform = anchor.rightEyeTransform * rotate;
+        leftEye.simdTransform = anchor.leftEyeTransform
+        rightEye.simdTransform = anchor.rightEyeTransform
         
     }
     
