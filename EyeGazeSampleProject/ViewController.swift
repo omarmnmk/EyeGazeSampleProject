@@ -37,7 +37,7 @@ class ViewController: UIViewController{
         // otherwise display an error message and terminate the app.
         guard ARFaceTrackingConfiguration.isSupported else {
             let alertController = UIAlertController(title: "iPhone X is not detected", message:
-                                                        "You need a iPhone X to use this app", preferredStyle: UIAlertController.Style.alert)
+                                                        "You need an iPhone X to use this app", preferredStyle: UIAlertController.Style.alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
             fatalError("ARFaceTracking is not supported on your device!")
