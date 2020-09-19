@@ -13,21 +13,24 @@ class ViewController: UIViewController{
     
     @IBOutlet weak var sceneView: ARSCNView!
     
+    @IBOutlet weak var directionLabel: UILabel!
     
-//    let screenWidth = UIScreen.main.bounds.width
-//    let screenHeight = UIScreen.main.bounds.height
-    
+
     var leftEye: SCNNode!
     var rightEye: SCNNode!
-    
+
+    let thresholdValue :Float = 0.1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //print("\(UIScreen.main.bounds.width) - \(UIScreen.main.bounds.height)")
         self.sceneView.delegate = self
         
         sceneView.showsStatistics = true
+
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -126,19 +129,87 @@ extension ViewController: ARSCNViewDelegate {
     }
     
     
+   
     // MARK: update(ARFaceAnchor)
     func update(withFaceAnchor anchor: ARFaceAnchor) {
-        
-//        let rotate:matrix_float4x4 =
-//            simd_float4x4(SCNMatrix4Mult(SCNMatrix4MakeRotation(-Float.pi / 2.0, 1, 0, 0), SCNMatrix4MakeTranslation(0, 0, 0.1/2)))
-        
+
         leftEye.simdTransform = anchor.leftEyeTransform
         rightEye.simdTransform = anchor.rightEyeTransform
+
+        updateLabel(anchor)
+    }
+    
+   
+    // MARK: update(ARFaceAnchor)
+    fileprivate func updateLabel(_ anchor: ARFaceAnchor) {
         
+        // upward gaze
+        let rightEyeLookingUp = anchor.blendShapes[.eyeLookUpRight]!.floatValue
+        let leftEyeLookingUp = anchor.blendShapes[.eyeLookUpLeft]!.floatValue
+        let up = (rightEyeLookingUp + leftEyeLookingUp) / 2
+        
+        // Looking downward gaze
+        let rightEyeLookingDown = anchor.blendShapes[.eyeLookDownRight]!.floatValue
+        let leftEyeLookingDown = anchor.blendShapes[.eyeLookDownLeft]!.floatValue
+        let down = (rightEyeLookingDown + leftEyeLookingDown) / 2
+        
+        
+        // Leftward gaze
+        let rightEyeLookingLeft = anchor.blendShapes[.eyeLookInRight]!.floatValue
+        let leftEyeLookingLeft = anchor.blendShapes[.eyeLookOutLeft]!.floatValue
+        let left = (rightEyeLookingLeft + leftEyeLookingLeft) / 2
+        
+        
+        // Rightward gaze
+        let rightEyeLookingRight = anchor.blendShapes[.eyeLookOutRight]!.floatValue
+        let leftEyeLookingRight = anchor.blendShapes[.eyeLookInLeft]!.floatValue
+        let right = (rightEyeLookingRight + leftEyeLookingRight) / 2
+        
+        
+        var allValuesLessThanThresholdValue = true
+        
+        if up > self.thresholdValue {
+            setLabelText(text: "Looking UP")
+            allValuesLessThanThresholdValue = false
+        }
+        
+        if down > self.thresholdValue {
+            setLabelText(text: "Looking DOWN")
+            allValuesLessThanThresholdValue = false
+        }
+        
+        // The coordinate system is right-handed—the positive x direction points to the viewer’s right (that is, the face’s own left)
+
+        if left > self.thresholdValue {
+            setLabelText(text: "Looking RIGHT")
+            allValuesLessThanThresholdValue = false
+        }
+        
+        if right > self.thresholdValue {
+            setLabelText(text: "Looking LEFT")
+            allValuesLessThanThresholdValue = false
+        }
+        
+        
+        // if user is not looking to any of the above directions
+        if allValuesLessThanThresholdValue {
+            setLabelText(text: "")
+        }
+    }
+    
+    
+    // MARK: Update label text
+    fileprivate func setLabelText(text: String) {
+        DispatchQueue.main.async (execute: {() -> Void in
+            
+            self.directionLabel.text = text
+            
+        })
     }
     
     
     
-    
-    
 }
+
+
+

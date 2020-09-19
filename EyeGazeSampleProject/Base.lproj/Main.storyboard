@@ -19,17 +19,30 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kv1-zh-wsS">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </arscnView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q8P-pj-VIx">
+                                <rect key="frame" x="90.5" y="768" width="233" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Fqf-Gy-Dtw"/>
+                                    <constraint firstAttribute="width" constant="233" id="bbC-k2-me1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="q8P-pj-VIx" firstAttribute="centerX" secondItem="kv1-zh-wsS" secondAttribute="centerX" id="9P9-2E-M6J"/>
                             <constraint firstAttribute="bottom" secondItem="kv1-zh-wsS" secondAttribute="bottom" id="Ehw-Ae-3HT"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="q8P-pj-VIx" secondAttribute="bottom" constant="64" id="VGd-Nk-Siy"/>
                             <constraint firstItem="kv1-zh-wsS" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="VaV-Dp-x6E"/>
                             <constraint firstItem="kv1-zh-wsS" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="c1j-Ze-ERa"/>
                             <constraint firstItem="kv1-zh-wsS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="nA7-ik-gqa"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="directionLabel" destination="q8P-pj-VIx" id="LML-5f-mm0"/>
                         <outlet property="sceneView" destination="kv1-zh-wsS" id="eTy-Gw-xmQ"/>
                     </connections>
                 </viewController>
